@@ -341,7 +341,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero-shape.s3 { bottom: -8px; left: 24px; }
 
 /* === 9. PROJECTS SECTION (Home featured) === */
-.projects-section { padding: 72px 0 80px; }
+.projects-section { padding: 132px 0 80px; }
 .projects-section .sec-title { margin-bottom: 40px; }
 .see-more-wrap { text-align: center; margin-top: 52px; }
 

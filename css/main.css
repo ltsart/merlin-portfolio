@@ -781,6 +781,26 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .img-placeholder-grid .img-placeholder { height: 260px; margin: 0; }
 
+/* Project detail images */
+.proj-img {
+  width: 100%;
+  border-radius: var(--radius-m);
+  display: block;
+  margin-bottom: 24px;
+  object-fit: cover;
+}
+.proj-img.full { height: auto; }
+.proj-img-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.proj-img-grid .proj-img { margin: 0; }
+@media (max-width: 600px) {
+  .proj-img-grid { grid-template-columns: 1fr; }
+}
+
 /* === 14. PROJECTS PAGE HEADER === */
 .projects-page-header {
   max-width: var(--content-w);

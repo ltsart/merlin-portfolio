@@ -93,7 +93,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   backdrop-filter: blur(24px) saturate(160%);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
   border: 1px solid rgba(255,255,255,.6);
-  box-shadow: var(--shadow-s);
 }
 
 .nav-logo {
@@ -103,9 +102,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 15px;
   color: var(--text-1);
   letter-spacing: -.01em;
-  transition: box-shadow var(--t);
 }
-.nav-logo:hover { box-shadow: var(--shadow-m); }
+.nav-logo:hover { }
 
 .nav-right {
   padding: 10px 10px 10px 28px;

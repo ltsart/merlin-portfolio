@@ -784,7 +784,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* Project detail images */
 .proj-img {
   width: 100%;
-  border-radius: var(--radius-m);
+  border-radius: 40px;
   display: block;
   margin-bottom: 24px;
   object-fit: cover;

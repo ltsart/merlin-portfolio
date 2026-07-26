@@ -552,10 +552,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   flex-shrink: 0;
   /* 4 visible: adapts to actual viewport, capped at content-w */
   width: calc((min(100vw, var(--content-w)) - 112px - 60px) / 4);
-  background: #fff;
+  background: #F4FEFC;
   border-radius: var(--radius-l);
   padding: 24px 22px;
-  box-shadow: 0 2px 16px rgba(0,0,0,.07);
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -698,7 +697,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* === 13. PROJECT DETAIL PAGE === */
 .proj-detail-page { padding-bottom: 120px; }
-.proj-detail-page .container { max-width: 820px; }
+.proj-detail-page .container { max-width: 640px; }
 
 .proj-hero-img {
   width: 100%;

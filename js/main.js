@@ -21,6 +21,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ---- Hide/Show Nav on scroll (mobile only) ---- */
+  const siteNav = document.querySelector('.site-nav');
+  if (siteNav) {
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      if (window.innerWidth > 600) {
+        // 桌面版：確保不殘留 nav-hidden 狀態
+        siteNav.classList.remove('nav-hidden');
+        lastScrollY = window.scrollY;
+        return;
+      }
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < 80) {
+        // 接近頁頂：永遠顯示
+        siteNav.classList.remove('nav-hidden');
+      } else if (currentScrollY > lastScrollY + 4) {
+        // 往下滑 → 隱藏
+        siteNav.classList.add('nav-hidden');
+      } else if (currentScrollY < lastScrollY - 4) {
+        // 往上滑 → 顯示
+        siteNav.classList.remove('nav-hidden');
+      }
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+  }
+
   /* ---- Contact Modal ---- */
   const modalOverlay = document.querySelector('.modal-overlay');
   const modalClose   = document.querySelector('.modal-close');
@@ -169,15 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---- Parallax: Hero Photo (desktop only) ---- */
   const heroPhotoWrap = document.querySelector('.hero-photo-wrap');
   if (heroPhotoWrap) {
-    // factor 0.22 → 每滾動 100px 照片向下移 22px，速度比頁面慢
-    // 只在桌面 (>600px) 啟用，避免手機直排時產生位移衝突
-    const parallaxFactor = 0.22;
+    // 桌面 0.22，手機 0.30（視野較小，加強效果更明顯）
     window.addEventListener('scroll', () => {
-      if (window.innerWidth > 600) {
-        heroPhotoWrap.style.transform = `translateY(${window.scrollY * parallaxFactor}px)`;
-      } else {
-        heroPhotoWrap.style.transform = '';
-      }
+      const factor = window.innerWidth <= 600 ? 0.30 : 0.22;
+      heroPhotoWrap.style.transform = `translateY(${window.scrollY * factor}px)`;
     }, { passive: true });
   }
 

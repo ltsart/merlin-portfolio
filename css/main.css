@@ -32,7 +32,7 @@
 }
 
 /* === 2. RESET === */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html {
   scroll-behavior: smooth;
   background: #ffffff; /* 1440px 外側填白 */
@@ -76,6 +76,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   height: 100px;
   /* nav bar 本身透明，毛玻璃只在左右兩個 pill 上 */
   background: transparent;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.site-nav.nav-hidden {
+  /* 手機版：往下滑時隱藏 header */
+  transform: translateY(0); /* desktop fallback: never hide */
 }
 
 /* nav-inner 固定 1272px 寬，居中對齊，確保所有螢幕尺寸下 header 內容恆為 1272px */
@@ -1014,6 +1019,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
   /* Nav */
   .site-nav { height: 72px; margin-top: 16px; top: 16px; }
+  .site-nav.nav-hidden { transform: translateY(-130px); } /* 往上推離螢幕 */
   .nav-inner { padding: 0 16px 0 24px; align-items: center; }
   .nav-logo { height: 72px; padding: 0 20px; border-radius: 24px; }
   .nav-right { display: none; }
@@ -1022,7 +1028,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .back-btn { top: 98px; left: 12px; }
 
   /* Hero */
-  .hero { padding: 20px 0 36px; overflow: hidden; } /* clip blob pseudo-element */
+  .hero { padding: 20px 0 36px; }
+  /* 把 blob 限制在 viewport 寬度內，避免橫向溢出但不裁切上下 */
+  .hero::before { width: 100vw; height: 480px; left: 50%; }
   .hero-text { order: 2; max-width: 100%; }
   .hero-photo-wrap { order: 1; width: 220px; height: 278px; }
   .hero-inner { gap: 16px; }

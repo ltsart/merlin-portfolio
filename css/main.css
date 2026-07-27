@@ -556,6 +556,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   flex-shrink: 0;
   transition: border-color var(--t), background var(--t);
 }
+.comments-nav-btn:active:not(:disabled) {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+.comments-nav-btn:active:not(:disabled) svg { color: #fff; }
 @media (hover: hover) {
   .comments-nav-btn:hover:not(:disabled) {
     border-color: var(--primary);

@@ -38,23 +38,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const siteNav = document.querySelector('.site-nav');
   if (siteNav) {
     let lastScrollY = window.scrollY;
+    let downDelta = 0; // 累積往下的滑動距離
     window.addEventListener('scroll', () => {
       if (window.innerWidth > 600) {
         // 桌面版：確保不殘留 nav-hidden 狀態
         siteNav.classList.remove('nav-hidden');
         lastScrollY = window.scrollY;
+        downDelta = 0;
         return;
       }
       const currentScrollY = window.scrollY;
       if (currentScrollY < 80) {
         // 接近頁頂：永遠顯示
         siteNav.classList.remove('nav-hidden');
-      } else if (currentScrollY > lastScrollY + 4) {
-        // 往下滑 → 隱藏
-        siteNav.classList.add('nav-hidden');
+        downDelta = 0;
+      } else if (currentScrollY > lastScrollY) {
+        // 往下滑：累積距離，超過 40px 才隱藏
+        downDelta += currentScrollY - lastScrollY;
+        if (downDelta > 40) {
+          siteNav.classList.add('nav-hidden');
+        }
       } else if (currentScrollY < lastScrollY - 4) {
-        // 往上滑 → 顯示
+        // 往上滑 → 立即顯示，重置累積
         siteNav.classList.remove('nav-hidden');
+        downDelta = 0;
       }
       lastScrollY = currentScrollY;
     }, { passive: true });

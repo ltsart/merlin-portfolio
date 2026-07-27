@@ -118,10 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
     prevBtn.addEventListener('click', () => {
       current = Math.max(0, current - getVisible());
       updateCarousel();
+      prevBtn.blur();
     });
     nextBtn.addEventListener('click', () => {
       current = Math.min(maxIndex(), current + getVisible());
       updateCarousel();
+      nextBtn.blur();
     });
 
     // Reset on resize

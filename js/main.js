@@ -10,16 +10,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileMenu = document.querySelector('.mobile-menu');
   const mobileClose = document.querySelector('.mobile-menu-close');
 
-  if (hamburger && mobileMenu) {
-    const openMenu  = () => { mobileMenu.classList.add('open');    hamburger.classList.add('is-open'); };
-    const closeMenu = () => { mobileMenu.classList.remove('open'); hamburger.classList.remove('is-open'); };
+  const openMenu  = () => { mobileMenu?.classList.add('open');    hamburger?.classList.add('is-open'); };
+  const closeMenu = () => { mobileMenu?.classList.remove('open'); hamburger?.classList.remove('is-open'); };
 
+  if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', openMenu);
     mobileClose?.addEventListener('click', closeMenu);
     mobileMenu.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
   }
+
+  /* ---- Prevent Android back gesture from exiting the site ---- */
+  // Push a buffer entry so the first back gesture doesn't exit to blank screen.
+  // For a static multi-page site, popstate only fires for same-URL pushState
+  // history states (not for navigating between .html pages), so this is safe.
+  history.pushState(null, '');
+  window.addEventListener('popstate', function () {
+    if (mobileMenu && mobileMenu.classList.contains('open')) {
+      closeMenu(); // 如果選單開著，返回手勢先關閉選單
+    } else {
+      history.pushState(null, ''); // 否則留在當前頁
+    }
+  });
 
   /* ---- Hide/Show Nav on scroll (mobile only) ---- */
   const siteNav = document.querySelector('.site-nav');

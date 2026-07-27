@@ -127,6 +127,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ---- Parallax: Project Hero Image ---- */
+  const projHeroWrap = document.querySelector('.proj-hero-wrap');
+  const projHeroImg  = document.querySelector('.proj-hero-img');
+  if (projHeroWrap && projHeroImg) {
+    const FACTOR = 0.10; // 10% of viewport-relative offset → subtle depth
+    function updateProjParallax() {
+      if (window.innerWidth <= 600) {
+        projHeroImg.style.transform = '';
+        return;
+      }
+      const rect   = projHeroWrap.getBoundingClientRect();
+      const relY   = (rect.top + rect.height / 2) - window.innerHeight / 2;
+      projHeroImg.style.transform = `translateY(${relY * FACTOR}px)`;
+    }
+    window.addEventListener('scroll', updateProjParallax, { passive: true });
+    window.addEventListener('resize', updateProjParallax, { passive: true });
+    updateProjParallax();
+  }
+
   /* ---- Parallax: Hero Photo (desktop only) ---- */
   const heroPhotoWrap = document.querySelector('.hero-photo-wrap');
   if (heroPhotoWrap) {

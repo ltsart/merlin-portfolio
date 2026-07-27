@@ -46,6 +46,7 @@ body {
   /* 頁面最寬 1440px，超寬螢幕兩側填白 */
   max-width: 1440px;
   margin: 0 auto;
+  overflow-x: hidden;
   /* 頁面淡入動畫 */
   animation: page-fade-in 0.2s ease-out;
 }
@@ -68,7 +69,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* === 4. NAVIGATION === */
 .site-nav {
   position: sticky;
-  top: 0;
+  top: 40px;
+  margin-top: 40px;
   z-index: 200;
   height: 100px;
   /* nav bar 本身透明，毛玻璃只在左右兩個 pill 上 */
@@ -96,18 +98,22 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 .nav-logo {
-  padding: 18px 28px;
-  border-radius: var(--radius-pill);
+  padding: 0 28px;
+  height: 100px;
+  border-radius: 40px;
   font-weight: 700;
   font-size: 15px;
   color: var(--text-1);
   letter-spacing: -.01em;
+  display: flex;
+  align-items: center;
 }
 .nav-logo:hover { }
 
 .nav-right {
-  padding: 10px 10px 10px 28px;
-  border-radius: var(--radius-pill);
+  padding: 0 10px 0 28px;
+  height: 100px;
+  border-radius: 40px;
   display: flex;
   align-items: center;
   gap: 32px;
@@ -131,24 +137,21 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   align-items: center;
   gap: 7px;
-  transition: background var(--t), transform var(--t);
+  transition: background var(--t), gap var(--t);
   white-space: nowrap;
 }
-.btn-contact:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.btn-contact:hover { background: var(--primary-dark); gap: 15px; }
 
 /* Hamburger */
 .nav-hamburger {
   display: none;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  justify-content: center;
   padding: 8px;
-}
-.nav-hamburger span {
-  display: block;
-  width: 22px; height: 2px;
-  background: var(--text-1);
-  border-radius: 2px;
-  transition: all var(--t);
+  color: var(--text-1);
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 /* Mobile menu */
@@ -170,18 +173,22 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .mobile-menu-close {
   position: absolute;
   top: 22px; right: 28px;
-  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--text-1);
   cursor: pointer;
-  line-height: 1;
+  background: none;
+  border: none;
+  padding: 4px;
 }
 
 /* === 5. BACK BUTTON — fixed + 毛玻璃 === */
 .back-btn {
   position: fixed;
-  top: 110px;  /* nav(100px) + 10px gap */
+  top: 150px;  /* margin(40px) + nav(100px) + 10px gap */
   /* 對齊 nav-inner 左緣：nav-inner 最寬 1272px 居中 → left = max(0, (100vw-1272px)/2) */
-  left: max(40px, calc((100vw - 1272px) / 2 + 40px));
+  left: max(0px, calc((100vw - 1272px) / 2));
   z-index: 201; /* above nav */
   display: inline-flex;
   align-items: center;
@@ -623,12 +630,16 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 13px;
   font-weight: 500;
   color: var(--text-2);
-  transition: border-color var(--t), color var(--t), background var(--t);
 }
-.skill-tag:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: var(--primary-light);
+@media (hover: hover) {
+  .skill-tag {
+    transition: border-color var(--t), color var(--t), background var(--t);
+  }
+  .skill-tag:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+  }
 }
 
 .intro-text {
@@ -725,6 +736,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .proj-hero-img {
@@ -733,6 +745,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   object-fit: contain;
   border-radius: var(--radius-m);
   display: block;
+  will-change: transform;
 }
 
 .proj-detail-title {
@@ -905,7 +918,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   border-radius: 50%;
   transition: color var(--t), background var(--t);
 }
-.modal-close:hover { color: var(--text-1); background: var(--surface); }
+.modal-close:hover { color: #fff; background: var(--primary); }
 .modal-close svg { width: 22px; height: 22px; fill: currentColor; }
 
 .modal-title {
@@ -948,7 +961,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .hero-inner { padding: 0 36px; gap: 32px; }
   .projects-page-header { padding: 0 36px 40px; }
   .nav-inner { padding: 0 16px; }
-  .back-btn { left: 40px; }
+  .back-btn { left: 16px; }
 
   .hero-text h1 { font-size: 58px; }
   .sec-title { font-size: 40px; }
@@ -972,11 +985,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .projects-page-header { padding: 0 20px 32px; }
 
   /* Nav */
-  .site-nav { height: 72px; }
+  .site-nav { height: 72px; margin-top: 16px; top: 16px; }
   .nav-inner { padding: 0 12px; }
   .nav-right { display: none; }
   .nav-hamburger { display: flex; }
-  .back-btn { top: 82px; left: 20px; }
+  .back-btn { top: 98px; left: 12px; }
 
   /* Hero */
   .hero { padding: 20px 0 36px; }
@@ -1007,6 +1020,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .comments-nav-btns { position: static; transform: none; }
 
   /* About */
+  .about-label { font-size: 28px; }
   .about-photo { width: 180px; height: 180px; }
   .about-sec { max-width: 100%; padding: 0 20px; }
   .info-table td { font-size: 14px; }

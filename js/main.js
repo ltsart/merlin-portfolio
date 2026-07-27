@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const projHeroWrap = document.querySelector('.proj-hero-wrap');
   const projHeroImg  = document.querySelector('.proj-hero-img');
   if (projHeroWrap && projHeroImg) {
-    const FACTOR = 0.10; // 10% of viewport-relative offset → subtle depth
+    const FACTOR = 0.20; // 20% of viewport-relative offset
     function updateProjParallax() {
       if (window.innerWidth <= 600) {
         projHeroImg.style.transform = '';
@@ -147,6 +147,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateProjParallax, { passive: true });
     updateProjParallax();
   }
+
+  /* ---- Scroll Reveal ---- */
+  setTimeout(() => {
+    const revealEls = document.querySelectorAll('.reveal');
+    if (revealEls.length) {
+      const revealObserver = new IntersectionObserver((entries) => {
+        const showing = entries
+          .filter(e => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        showing.forEach((entry, i) => {
+          entry.target.style.transitionDelay = `${i * 0.08}s`;
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+      revealEls.forEach(el => revealObserver.observe(el));
+    }
+  }, 200);
 
   /* ---- Parallax: Hero Photo (desktop only) ---- */
   const heroPhotoWrap = document.querySelector('.hero-photo-wrap');

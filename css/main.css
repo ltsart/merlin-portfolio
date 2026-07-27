@@ -36,6 +36,7 @@
 html {
   scroll-behavior: smooth;
   background: #ffffff; /* 1440px 外側填白 */
+  overflow-x: hidden; /* 防止 mobile layout viewport 因絕對定位元素而變寬 */
 }
 body {
   font-family: var(--font);
@@ -1021,7 +1022,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .back-btn { top: 98px; left: 12px; }
 
   /* Hero */
-  .hero { padding: 20px 0 36px; }
+  .hero { padding: 20px 0 36px; overflow: hidden; } /* clip blob pseudo-element */
   .hero-text { order: 2; max-width: 100%; }
   .hero-photo-wrap { order: 1; width: 220px; height: 278px; }
   .hero-inner { gap: 16px; }
@@ -1030,7 +1031,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .hero-bg-blob { width: 320px; }
   .hero-photo-glow { width: 220px; height: 278px; border-radius: 110px; }
   .hero-photo { width: 220px; height: 278px; border-radius: 110px; }
-  .hero-text .btn-outline { display: block; width: fit-content; margin: 0 auto; }
+  .hero-text .btn-outline { display: flex; width: fit-content; margin: 0 auto; }
 
   /* Proj L cards */
   .proj-card-l { gap: 14px; padding: 14px 10px; }

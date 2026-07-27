@@ -986,7 +986,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
   /* Nav */
   .site-nav { height: 72px; margin-top: 16px; top: 16px; }
-  .nav-inner { padding: 0 12px; }
+  .nav-inner { padding: 0 16px 0 24px; align-items: center; }
+  .nav-logo { height: 72px; padding: 0 20px; border-radius: 24px; }
   .nav-right { display: none; }
   .nav-hamburger { display: flex; }
   .back-btn { top: 98px; left: 12px; }

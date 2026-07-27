@@ -918,13 +918,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .modal-box {
   background: #fff;
   border-radius: var(--radius-xl);
-  padding: 52px 60px;
-  width: 460px;
+  padding: 48px 80px;
+  width: 800px;
   max-width: calc(100vw - 32px);
+  height: 372px;
+  max-height: calc(100vh - 40px);
   position: relative;
   transform: translateY(20px) scale(.97);
   transition: transform .26s var(--ease);
   box-shadow: var(--shadow-l);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
 
@@ -960,7 +966,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   margin-bottom: 20px;
   text-decoration: none;
   transition: color var(--t);
+  min-width: 300px;
 }
+.modal-item:last-child { margin-bottom: 0; }
 .modal-item:hover { color: var(--primary); }
 .modal-icon {
   width: 24px; height: 24px;
@@ -1061,9 +1069,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .img-placeholder-grid .img-placeholder { height: 180px; }
 
   /* Modal */
-  .modal-box { padding: 40px 28px; border-radius: var(--radius-l); }
+  .modal-box { padding: 40px 28px; border-radius: var(--radius-l); height: auto; min-height: unset; }
   .modal-title { font-size: 24px; margin-bottom: 32px; }
-  .modal-item { font-size: 14px; }
+  .modal-item { font-size: 14px; min-width: unset; }
 
   /* Footer / BTT */
   .back-to-top { bottom: 20px; right: 20px; }

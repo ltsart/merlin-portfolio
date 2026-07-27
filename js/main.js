@@ -11,11 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileClose = document.querySelector('.mobile-menu-close');
 
   if (hamburger && mobileMenu) {
-    hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
-    mobileClose?.addEventListener('click', () => mobileMenu.classList.remove('open'));
-    // Close on nav link click
+    const openMenu  = () => { mobileMenu.classList.add('open');    hamburger.classList.add('is-open'); };
+    const closeMenu = () => { mobileMenu.classList.remove('open'); hamburger.classList.remove('is-open'); };
+
+    hamburger.addEventListener('click', openMenu);
+    mobileClose?.addEventListener('click', closeMenu);
     mobileMenu.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+      link.addEventListener('click', closeMenu);
     });
   }
 

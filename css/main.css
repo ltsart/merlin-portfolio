@@ -156,7 +156,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* Mobile menu */
 .mobile-menu {
-  display: none;
+  display: flex;
   position: fixed;
   inset: 0;
   z-index: 300;
@@ -166,8 +166,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   align-items: center;
   justify-content: center;
   gap: 40px;
+  /* opacity-based show/hide for animatable transition */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s ease, visibility 0.28s;
 }
-.mobile-menu.open { display: flex; }
+.mobile-menu.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
 .mobile-menu .nav-link { font-size: 24px; font-weight: 700; }
 .mobile-menu .btn-contact { font-size: 17px; padding: 14px 32px; }
 .mobile-menu-close {
@@ -181,6 +190,24 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: none;
   border: none;
   padding: 4px;
+  /* 初始：旋轉縮小，隨 menu 淡入 */
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.6);
+  transition: opacity 0.22s ease 0.08s, transform 0.22s ease 0.08s;
+}
+.mobile-menu.open .mobile-menu-close {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Hamburger：menu 開啟時旋轉淡出 */
+.nav-hamburger {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.nav-hamburger.is-open {
+  opacity: 0;
+  transform: rotate(45deg) scale(0.6);
+  pointer-events: none;
 }
 
 /* === 5. BACK BUTTON — fixed + 毛玻璃 === */

@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (heroPhotoWrap) {
     // 桌面 0.22，手機 0.30（視野較小，加強效果更明顯）
     window.addEventListener('scroll', () => {
-      const factor = window.innerWidth <= 600 ? 0.30 : 0.22;
+      const factor = window.innerWidth <= 600 ? 0.18 : 0.22;
       heroPhotoWrap.style.transform = `translateY(${window.scrollY * factor}px)`;
     }, { passive: true });
   }

@@ -918,18 +918,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .modal-box {
   background: #fff;
   border-radius: var(--radius-xl);
-  padding: 48px 80px;
-  width: 800px;
+  padding: 56px 64px;
+  width: 480px;
   max-width: calc(100vw - 32px);
-  height: 372px;
-  max-height: calc(100vh - 40px);
   position: relative;
   transform: translateY(20px) scale(.97);
   transition: transform .26s var(--ease);
   box-shadow: var(--shadow-l);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }

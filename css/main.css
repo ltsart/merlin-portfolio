@@ -960,6 +960,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   margin-bottom: 40px;
   letter-spacing: -.01em;
 }
+.modal-items {
+  display: flex;
+  flex-direction: column;
+  /* 寬度自動撐到最寬子元素，再被 modal-box align-items:center 整體置中 */
+}
 .modal-item {
   display: flex;
   align-items: center;

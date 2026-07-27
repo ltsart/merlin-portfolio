@@ -1040,7 +1040,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     -webkit-backdrop-filter: blur(24px) saturate(160%);
     border: 1px solid rgba(255,255,255,.6);
   }
-  .mobile-menu-close { top: 16px; right: 16px; height: 72px; justify-content: center; }
+  .mobile-menu-close { top: 16px; right: 16px; width: 72px; height: 72px; justify-content: center; }
   .back-btn { top: 98px; left: 12px; }
 
   /* Hero */

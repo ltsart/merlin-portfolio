@@ -42,6 +42,7 @@ body {
   font-family: var(--font);
   color: var(--text-2);
   background: var(--bg);
+  padding-top: 140px; /* fixed nav: top 40px + height 100px */
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
   /* 頁面最寬 1440px，超寬螢幕兩側填白 */
@@ -69,9 +70,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* === 4. NAVIGATION === */
 .site-nav {
-  position: sticky;
+  position: fixed;
   top: 40px;
-  margin-top: 40px;
+  left: 0;
+  right: 0;
+  margin-top: 0;
   z-index: 200;
   height: 100px;
   /* nav bar 本身透明，毛玻璃只在左右兩個 pill 上 */
@@ -1039,8 +1042,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .hero-inner { padding: 0 20px; flex-direction: column; align-items: center; text-align: center; gap: 36px; }
   .projects-page-header { padding: 0 20px 32px; }
 
-  /* Nav — 改為 fixed，避免 overflow-x:hidden 破壞 sticky */
-  .site-nav { position: fixed; height: 72px; top: 16px; left: 0; right: 0; margin-top: 0; }
+  /* Nav — 手機版調整尺寸與位置（base 已是 fixed） */
+  .site-nav { height: 72px; top: 16px; }
   .site-nav.nav-hidden { transform: translateY(-130px); }
   /* 補回 fixed nav 佔掉的空間（top 16px + height 72px = 88px） */
   body { padding-top: 88px; }

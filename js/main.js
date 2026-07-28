@@ -133,6 +133,13 @@ document.addEventListener('DOMContentLoaded', () => {
       nextBtn.blur();
     });
 
+    // 手機觸控按壓視覺回饋（可靠的 touchstart/touchend 方式）
+    [prevBtn, nextBtn].forEach(btn => {
+      btn.addEventListener('touchstart', () => btn.classList.add('is-pressed'), { passive: true });
+      btn.addEventListener('touchend',   () => btn.classList.remove('is-pressed'));
+      btn.addEventListener('touchcancel',() => btn.classList.remove('is-pressed'));
+    });
+
     // Reset on resize
     let resizeTimer;
     window.addEventListener('resize', () => {

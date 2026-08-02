@@ -1066,6 +1066,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
   /* Hero */
   .hero { padding: 20px 0 36px; }
+  .projects-section { padding-top: 72px; } /* 132 - 60，讓 Projects 標題在第一屏可見 */
   /* 把 blob 限制在 viewport 寬度內，避免橫向溢出但不裁切上下 */
   .hero::before { width: 100vw; height: 480px; left: 50%; }
   .hero-text { order: 2; max-width: 100%; }

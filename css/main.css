@@ -326,6 +326,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero-text {
   flex: 0 0 auto;
   max-width: 480px;
+  margin-top: -60px; /* 桌機版招呼語上移 60px，照片維持置中 */
 }
 .hero-text h1 {
   font-size: 76px;
@@ -1069,7 +1070,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .projects-section { padding-top: 72px; } /* 132 - 60，讓 Projects 標題在第一屏可見 */
   /* 把 blob 限制在 viewport 寬度內，避免橫向溢出但不裁切上下 */
   .hero::before { width: 100vw; height: 480px; left: 50%; }
-  .hero-text { order: 2; max-width: 100%; }
+  .hero-text { order: 2; max-width: 100%; margin-top: 0; }
   .hero-photo-wrap { order: 1; width: 220px; height: 278px; }
   .hero-inner { gap: 56px; } /* 16 + 40 = 56，照片與文字多留 40px 間距 */
   .hero-text h1 { font-size: 40px; margin-bottom: 20px; }

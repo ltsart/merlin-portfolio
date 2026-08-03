@@ -37,12 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---- Hide/Show Nav on scroll (mobile only) ---- */
   const siteNav = document.querySelector('.site-nav');
   if (siteNav) {
+    const backBtn = document.querySelector('.back-btn');
     let lastScrollY = window.scrollY;
     let downDelta = 0; // 累積往下的滑動距離
+
+    function setNavHidden(hidden) {
+      siteNav.classList.toggle('nav-hidden', hidden);
+      backBtn?.classList.toggle('nav-hidden', hidden);
+    }
+
     window.addEventListener('scroll', () => {
       if (window.innerWidth > 600) {
         // 桌面版：確保不殘留 nav-hidden 狀態
-        siteNav.classList.remove('nav-hidden');
+        setNavHidden(false);
         lastScrollY = window.scrollY;
         downDelta = 0;
         return;
@@ -50,17 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY < 80) {
         // 接近頁頂：永遠顯示
-        siteNav.classList.remove('nav-hidden');
+        setNavHidden(false);
         downDelta = 0;
       } else if (currentScrollY > lastScrollY) {
         // 往下滑：累積距離，超過 40px 才隱藏
         downDelta += currentScrollY - lastScrollY;
         if (downDelta > 40) {
-          siteNav.classList.add('nav-hidden');
+          setNavHidden(true);
         }
       } else if (currentScrollY < lastScrollY - 4) {
         // 往上滑 → 立即顯示，重置累積
-        siteNav.classList.remove('nav-hidden');
+        setNavHidden(false);
         downDelta = 0;
       }
       lastScrollY = currentScrollY;

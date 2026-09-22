@@ -2,9 +2,9 @@
 
 ## 專案資訊
 - 網址：https://ltsart.github.io/merlin-portfolio/
-- 本地路徑：`/Users/merlin/Desktop/Claude Cowork/阿毛作品集/portfolio-web/`
+- 本地路徑：`/Users/merlin/Claude Cowork/阿毛作品集/portfolio-web/`
 - `merlin_resume_pdf.html` **不上傳 GitHub**，僅本地 PDF 匯出使用
-- Push 指令：`cd "/Users/merlin/Desktop/Claude Cowork/阿毛作品集/portfolio-web" && git add . && git commit -m "update" && git push`
+- Push 指令：`cd "/Users/merlin/Claude Cowork/阿毛作品集/portfolio-web" && git add . && git commit -m "update" && git push`
 
 ---
 

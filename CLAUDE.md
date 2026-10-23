@@ -6,6 +6,14 @@
 - `merlin_resume_pdf.html` **不上傳 GitHub**，僅本地 PDF 匯出使用
 - Push 指令：`cd "/Users/merlin/Claude Cowork/阿毛作品集/portfolio-web" && git add . && git commit -m "update" && git push`
 
+## 改動流程（2026-10-23 起，Merlin 指定）
+- **所有改動一律先做在測試版 `preview/`，推上去給 Merlin 確認 OK 後，才搬到正式版推送。不可直接改正式版頁面。**
+- 測試版網址：https://ltsart.github.io/merlin-portfolio/preview/（頁面左下有紅色「測試版」標籤、noindex）
+- 工具：`../tools/preview.py`
+  - `python3 preview.py init`：由正式版重建 `preview/`（HTML 的 assets 路徑自動改成 `../assets/`）
+  - 在 `preview/` 裡改 HTML / `preview/css/main.css` / `preview/js/main.js`，每次改完把 preview HTML 的 `?v=` 往上加（p1、p2…）避免快取
+  - Merlin 確認後：`python3 preview.py promote`（搬回根目錄、拿掉測試標籤、自動更新 `?v=`、刪除 `preview/`），再 commit + push
+
 ---
 
 ## 手機版開發規則（從實際踩坑中學到的）

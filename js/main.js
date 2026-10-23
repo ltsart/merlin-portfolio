@@ -221,6 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
     window.addEventListener('resize', measure);
     measure();
+    // 圖片若是第一次載入（尚未從快取讀到），DOMContentLoaded 當下量到的高度可能是 0，
+    // 導致 Cover 被鎖成 0 高度而「消失」；等圖片真正載入完成後要再量一次
+    const img = wrap.querySelector('img');
+    if (img && !img.complete) img.addEventListener('load', measure, { once: true });
   }
   initProjHeroExpand(document.querySelector('.proj-hero-wrap'));
 

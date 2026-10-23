@@ -783,14 +783,25 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   justify-content: center;
   overflow: hidden;
 }
+/* 往下捲時 Cover 等比例擴展到畫面寬，圓角同步收成直角（js：initProjHeroExpand 設定 --p 0→1、--base-w、--full-w、--hero-h）
+   --w 用同一套「50% - 寬度一半」置中公式（.container 本身置中，所以這招在任何寬度都能讓 Cover 對齊畫面水平中心）
+   --full-w 有上限（見 js MAX_FULL_W），避免超寬螢幕展開後兩側留白過多、圖片相對過小 */
+.proj-hero-wrap.is-expandable {
+  --p: 0;
+  --w: calc(var(--base-w) + (var(--full-w) - var(--base-w)) * var(--p));
+  width: var(--w);
+  height: var(--hero-h);
+  margin-left: calc(50% - (var(--w) / 2));
+  border-radius: calc(40px * (1 - var(--p)));
+}
 
 .proj-hero-img {
   width: 100%;
   height: auto;
+  max-height: 100%;
   object-fit: contain;
   border-radius: var(--radius-m);
   display: block;
-  will-change: transform;
 }
 
 .proj-detail-title {

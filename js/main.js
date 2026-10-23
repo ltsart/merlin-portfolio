@@ -191,24 +191,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---- Parallax: Project Hero Image ---- */
-  const projHeroWrap = document.querySelector('.proj-hero-wrap');
-  const projHeroImg  = document.querySelector('.proj-hero-img');
-  if (projHeroWrap && projHeroImg) {
-    const FACTOR = 0.20; // 20% of viewport-relative offset
-    function updateProjParallax() {
-      if (window.innerWidth <= 600) {
-        projHeroImg.style.transform = '';
-        return;
-      }
-      const rect   = projHeroWrap.getBoundingClientRect();
-      const relY   = (rect.top + rect.height / 2) - window.innerHeight / 2;
-      projHeroImg.style.transform = `translateY(${relY * FACTOR}px)`;
+  /* ---- 詳情頁 Cover：往下捲時從目前寬度等比例擴展到畫面寬，往上捲回原狀 ----
+     高度固定在原本的大小（圖片 object-fit: contain，維持完整不裁切），下方文字不會因此跳動；
+     --full-w 設有上限 MAX_FULL_W，避免超寬螢幕（如三螢幕/寬螢幕顯示器）展開後兩側留白色塊過大、
+     圖片相對變得很小的問題；捲動距離 0 → dist 對應進度 0 → 1，圓角同步收成直角 */
+  function initProjHeroExpand(wrap) {
+    if (!wrap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const MAX_DIST = 280;      // 捲動多少 px 後完全展開（跟 Cover 高度取小值）
+    const MAX_FULL_W = 1600;   // 展開上限寬度（px）；超寬螢幕時不會撐到整個視窗寬
+    let dist = MAX_DIST;
+    let ticking = false;
+    function measure() {
+      wrap.classList.remove('is-expandable');
+      wrap.style.removeProperty('--p');
+      wrap.style.setProperty('--base-w', wrap.getBoundingClientRect().width + 'px');
+      wrap.style.setProperty('--full-w', Math.min(window.innerWidth, MAX_FULL_W) + 'px');
+      wrap.style.setProperty('--hero-h', wrap.getBoundingClientRect().height + 'px');
+      dist = Math.min(MAX_DIST, wrap.getBoundingClientRect().height / 2);
+      wrap.classList.add('is-expandable');
+      update();
     }
-    window.addEventListener('scroll', updateProjParallax, { passive: true });
-    window.addEventListener('resize', updateProjParallax, { passive: true });
-    updateProjParallax();
+    function update() {
+      ticking = false;
+      const prog = Math.min(1, Math.max(0, window.scrollY / dist));
+      wrap.style.setProperty('--p', prog.toFixed(4));
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', measure);
+    measure();
   }
+  initProjHeroExpand(document.querySelector('.proj-hero-wrap'));
 
   /* ---- Scroll Reveal ---- */
   setTimeout(() => {

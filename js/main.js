@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
      圖片相對變得很小的問題；捲動距離 0 → dist 對應進度 0 → 1，圓角同步收成直角 */
   function initProjHeroExpand(wrap) {
     if (!wrap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const MAX_DIST = 280;      // 捲動多少 px 後完全展開（跟 Cover 高度取小值）
+    const MAX_DIST = 480;      // 捲動多少 px 後完全展開（跟 Cover 高度取小值；原本 280 一兩下捲動就結束，感覺不出漸變）
     const MAX_FULL_W = 1600;   // 展開上限寬度（px）；超寬螢幕時不會撐到整個視窗寬
     let dist = MAX_DIST;
     let ticking = false;

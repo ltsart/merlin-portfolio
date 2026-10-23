@@ -61,20 +61,6 @@ a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
-/* ============================================================
-   Scroll Reveal
-   ============================================================ */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* === 3. LAYOUT === */
 .container {
   max-width: var(--content-w);
@@ -489,11 +475,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
 }
 .proj-card-m:hover {
+  transform: translateY(-5px);
   box-shadow: var(--shadow-l);
 }
 .proj-card-m:hover .proj-m-arrow-btn { background: var(--primary); }
 .proj-card-m:hover .proj-m-arrow-btn svg { color: #fff; }
-.proj-card-m:hover .proj-m-img { transform: scale(1.05); }
 
 .proj-m-img {
   width: 100%;
@@ -502,7 +488,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: var(--surface);
   border-radius: var(--radius-l) var(--radius-l) 0 0;
   display: block;
-  transition: transform .5s var(--ease);
 }
 .proj-m-body {
   padding: 20px 24px 24px;
@@ -798,29 +783,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   justify-content: center;
   overflow: hidden;
 }
-/* 往下捲時 Cover 等比例擴展到畫面寬，圓角同步收成直角（js：initProjHeroExpand 設定 --p 0→1、--base-w/--full-w、--base-h/--full-h）
-   --w 用同一套「50% - 寬度一半」置中公式（.container 本身置中，所以這招在任何寬度都能讓 Cover 對齊畫面水平中心）
-   --full-w 有上限（見 js MAX_FULL_W），避免超寬螢幕展開後兩側留白過多、圖片相對過小
-   高度改用 --base-h → --full-h 跟寬度同比例一起長大（而不是固定高度），這樣圖片本身才會真的「放大」而不是只有外框變寬、圓角變直角
-   padding 也同步往 0 收，展開到最後圖片才會貼齊邊緣 */
-.proj-hero-wrap.is-expandable {
-  --p: 0;
-  --w: calc(var(--base-w) + (var(--full-w) - var(--base-w)) * var(--p));
-  --h: calc(var(--base-h) + (var(--full-h) - var(--base-h)) * var(--p));
-  width: var(--w);
-  height: var(--h);
-  margin-left: calc(50% - (var(--w) / 2));
-  border-radius: calc(40px * (1 - var(--p)));
-  padding: calc(var(--pad-y, 48px) * (1 - var(--p))) calc(var(--pad-x, 80px) * (1 - var(--p)));
-}
 
 .proj-hero-img {
   width: 100%;
   height: auto;
-  max-height: 100%;
   object-fit: contain;
   border-radius: var(--radius-m);
   display: block;
+  will-change: transform;
 }
 
 .proj-detail-title {
@@ -1157,3 +1127,16 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .back-to-top { bottom: 20px; right: 20px; }
 }
 
+/* ============================================================
+   Scroll Reveal
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

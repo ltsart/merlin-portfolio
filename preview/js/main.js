@@ -211,7 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const fullW = Math.min(window.innerWidth, MAX_FULL_W);
       // 高度跟寬度同比例放大（而不是鎖固定高度），這樣圖片本身才會真的「放大」，
       // 不會因為 object-fit: contain 卡在固定高度而只有外框變寬、看不出放大效果
-      const fullH = baseH * (fullW / baseW);
+      // 展開到底時高度剛好等於圖片本身比例（圖片貼齊邊緣、上下不留色條）；圖片還沒載入就先用外框比例
+      const im = wrap.querySelector('img');
+      const ratio = (im && im.naturalWidth) ? im.naturalHeight / im.naturalWidth : baseH / baseW;
+      const fullH = fullW * ratio;
       wrap.style.setProperty('--base-w', baseW + 'px');
       wrap.style.setProperty('--full-w', fullW + 'px');
       wrap.style.setProperty('--base-h', baseH + 'px');

@@ -817,6 +817,7 @@ html:has(.proj-hero-wrap) { overflow-anchor: none; }
   border-radius: calc(40px * (1 - var(--p)));
   padding: calc(var(--pad-y, 48px) * (1 - var(--p))) calc(var(--pad-x, 80px) * (1 - var(--p)));
 }
+.proj-hero-wrap.is-expandable .proj-hero-img { border-radius: calc(var(--radius-m) * (1 - var(--p))); }
 
 .proj-hero-img {
   width: 100%;

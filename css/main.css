@@ -491,6 +491,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .proj-card-m:hover {
   box-shadow: var(--shadow-l);
 }
+/* 卡片進場：.proj-card-m 自己的 transition 會蓋掉 .reveal 的，這裡補回淡入與緩衝 */
+.proj-card-m.reveal {
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow var(--t) var(--ease);
+}
+.proj-card-m.reveal.visible { transform: translateY(0); }
 .proj-card-m:hover .proj-m-arrow-btn { background: var(--primary); }
 .proj-card-m:hover .proj-m-arrow-btn svg { color: #fff; }
 @media (hover: hover) {

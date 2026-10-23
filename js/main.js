@@ -251,8 +251,15 @@ document.addEventListener('DOMContentLoaded', () => {
           .filter(e => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         showing.forEach((entry, i) => {
-          entry.target.style.transitionDelay = `${i * 0.08}s`;
-          entry.target.classList.add('visible');
+          const el = entry.target;
+          el.style.transitionDelay = `${i * 0.12}s`;
+          el.classList.add('visible');
+          // 進場結束後清掉 delay，避免之後的 hover 效果也被延遲
+          el.addEventListener('transitionend', function clear(ev) {
+            if (ev.target !== el || ev.propertyName !== 'transform') return;
+            el.style.transitionDelay = '';
+            el.removeEventListener('transitionend', clear);
+          });
           revealObserver.unobserve(entry.target);
         });
       }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });

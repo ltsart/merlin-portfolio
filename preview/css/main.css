@@ -693,16 +693,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-weight: 500;
   color: var(--text-2);
 }
-@media (hover: hover) {
-  .skill-tag {
-    transition: border-color var(--t), color var(--t), background var(--t);
-  }
-  .skill-tag:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: var(--primary-light);
-  }
-}
+/* Skills 標籤不能點擊，不加 hover 效果，避免誤以為可點 */
 
 .intro-text {
   font-size: 14px;

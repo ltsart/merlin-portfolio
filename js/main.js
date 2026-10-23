@@ -191,24 +191,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---- Parallax: Project Hero Image ---- */
-  const projHeroWrap = document.querySelector('.proj-hero-wrap');
-  const projHeroImg  = document.querySelector('.proj-hero-img');
-  if (projHeroWrap && projHeroImg) {
-    const FACTOR = 0.20; // 20% of viewport-relative offset
-    function updateProjParallax() {
-      if (window.innerWidth <= 600) {
-        projHeroImg.style.transform = '';
-        return;
-      }
-      const rect   = projHeroWrap.getBoundingClientRect();
-      const relY   = (rect.top + rect.height / 2) - window.innerHeight / 2;
-      projHeroImg.style.transform = `translateY(${relY * FACTOR}px)`;
+  /* ---- 詳情頁 Cover：往下捲時從目前寬度等比例擴展到畫面寬，往上捲回原狀 ----
+     高度固定在原本的大小（圖片 object-fit: contain，維持完整不裁切），下方文字不會因此跳動；
+     --full-w 設有上限 MAX_FULL_W，避免超寬螢幕（如三螢幕/寬螢幕顯示器）展開後兩側留白色塊過大、
+     圖片相對變得很小的問題；捲動距離 0 → dist 對應進度 0 → 1，圓角同步收成直角 */
+  function initProjHeroExpand(wrap) {
+    if (!wrap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const MAX_DIST = 480;      // 捲動多少 px 後完全展開（跟 Cover 高度取小值；原本 280 一兩下捲動就結束，感覺不出漸變）
+    const MAX_FULL_W = 1600;   // 展開上限寬度（px）；超寬螢幕時不會撐到整個視窗寬
+    let dist = MAX_DIST;
+    let ticking = false;
+    function measure() {
+      wrap.classList.remove('is-expandable');
+      wrap.style.removeProperty('--p');
+      const rect = wrap.getBoundingClientRect();
+      const cs = getComputedStyle(wrap);
+      const baseW = rect.width;
+      const baseH = rect.height;
+      const fullW = Math.min(window.innerWidth, MAX_FULL_W);
+      // 高度跟寬度同比例放大（而不是鎖固定高度），這樣圖片本身才會真的「放大」，
+      // 不會因為 object-fit: contain 卡在固定高度而只有外框變寬、看不出放大效果
+      // 展開到底時高度剛好等於圖片本身比例（圖片貼齊邊緣、上下不留色條）；圖片還沒載入就先用外框比例
+      const im = wrap.querySelector('img');
+      const ratio = (im && im.naturalWidth) ? im.naturalHeight / im.naturalWidth : baseH / baseW;
+      const fullH = fullW * ratio;
+      wrap.style.setProperty('--base-w', baseW + 'px');
+      wrap.style.setProperty('--full-w', fullW + 'px');
+      wrap.style.setProperty('--base-h', baseH + 'px');
+      wrap.style.setProperty('--full-h', fullH + 'px');
+      wrap.style.setProperty('--pad-x', cs.paddingLeft);
+      wrap.style.setProperty('--pad-y', cs.paddingTop);
+      dist = Math.min(MAX_DIST, baseH / 2);
+      wrap.classList.add('is-expandable');
+      update();
     }
-    window.addEventListener('scroll', updateProjParallax, { passive: true });
-    window.addEventListener('resize', updateProjParallax, { passive: true });
-    updateProjParallax();
+    function update() {
+      ticking = false;
+      const prog = Math.min(1, Math.max(0, window.scrollY / dist));
+      wrap.style.setProperty('--p', prog.toFixed(4));
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', measure);
+    measure();
+    // 圖片若是第一次載入（尚未從快取讀到），DOMContentLoaded 當下量到的高度可能是 0，
+    // 導致 Cover 被鎖成 0 高度而「消失」；等圖片真正載入完成後要再量一次
+    const img = wrap.querySelector('img');
+    if (img && !img.complete) img.addEventListener('load', measure, { once: true });
   }
+  initProjHeroExpand(document.querySelector('.proj-hero-wrap'));
 
   /* ---- Scroll Reveal ---- */
   setTimeout(() => {

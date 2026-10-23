@@ -204,10 +204,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function measure() {
       wrap.classList.remove('is-expandable');
       wrap.style.removeProperty('--p');
-      wrap.style.setProperty('--base-w', wrap.getBoundingClientRect().width + 'px');
-      wrap.style.setProperty('--full-w', Math.min(window.innerWidth, MAX_FULL_W) + 'px');
-      wrap.style.setProperty('--hero-h', wrap.getBoundingClientRect().height + 'px');
-      dist = Math.min(MAX_DIST, wrap.getBoundingClientRect().height / 2);
+      const rect = wrap.getBoundingClientRect();
+      const cs = getComputedStyle(wrap);
+      const baseW = rect.width;
+      const baseH = rect.height;
+      const fullW = Math.min(window.innerWidth, MAX_FULL_W);
+      // 高度跟寬度同比例放大（而不是鎖固定高度），這樣圖片本身才會真的「放大」，
+      // 不會因為 object-fit: contain 卡在固定高度而只有外框變寬、看不出放大效果
+      const fullH = baseH * (fullW / baseW);
+      wrap.style.setProperty('--base-w', baseW + 'px');
+      wrap.style.setProperty('--full-w', fullW + 'px');
+      wrap.style.setProperty('--base-h', baseH + 'px');
+      wrap.style.setProperty('--full-h', fullH + 'px');
+      wrap.style.setProperty('--pad-x', cs.paddingLeft);
+      wrap.style.setProperty('--pad-y', cs.paddingTop);
+      dist = Math.min(MAX_DIST, baseH / 2);
       wrap.classList.add('is-expandable');
       update();
     }

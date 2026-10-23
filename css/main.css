@@ -80,6 +80,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   /* nav bar 本身透明，毛玻璃只在左右兩個 pill 上 */
   background: transparent;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  /* nav 透明區域不應攔截點擊，避免擋住捲動到同一高度的頁面內容（例如 See More 按鈕） */
+  pointer-events: none;
+}
+.site-nav .nav-inner > * {
+  pointer-events: auto;
 }
 .site-nav.nav-hidden {
   /* 手機版：往下滑時隱藏 header */

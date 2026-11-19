@@ -1234,7 +1234,12 @@ html:has(.proj-hero-wrap) { overflow-anchor: none; }
 /* ============================================================
    Lightbox（專案詳情頁圖片點擊放大）
    ============================================================ */
-.proj-detail-page .proj-img { cursor: zoom-in; }
+/* 游標：32px 青綠圓底白色「＋」，熱點在圓心（Chrome 超過 32px 的自訂游標在畫面邊緣會變回內建游標）；不支援時退回 zoom-in */
+.proj-detail-page .proj-img {
+  cursor: url('../assets/cursor-zoom.png?v=2') 16 16, zoom-in;
+  cursor: -webkit-image-set(url('../assets/cursor-zoom.png?v=2') 1x, url('../assets/cursor-zoom@2x.png?v=2') 2x) 16 16, zoom-in;
+  cursor: image-set(url('../assets/cursor-zoom.png?v=2') 1x, url('../assets/cursor-zoom@2x.png?v=2') 2x) 16 16, zoom-in;
+}
 .proj-detail-page .proj-img:focus-visible { outline: 3px solid var(--primary); outline-offset: 4px; }
 .lightbox {
   position: fixed; inset: 0; z-index: 600;

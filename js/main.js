@@ -27,7 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // history states (not for navigating between .html pages), so this is safe.
   history.pushState(null, '');
   window.addEventListener('popstate', function () {
-    if (mobileMenu && mobileMenu.classList.contains('open')) {
+    if (window.isLightboxOpen && window.isLightboxOpen()) {
+      window.closeLightbox(); // 燈箱開著時，返回手勢先關閉燈箱
+      history.pushState(null, '');
+    } else if (mobileMenu && mobileMenu.classList.contains('open')) {
       closeMenu(); // 如果選單開著，返回手勢先關閉選單
     } else {
       history.pushState(null, ''); // 否則留在當前頁
@@ -276,5 +279,151 @@ document.addEventListener('DOMContentLoaded', () => {
       heroPhotoWrap.style.transform = `translateY(${window.scrollY * factor}px)`;
     }, { passive: true });
   }
+
+
+  /* ---- Link card: 手機按壓回饋 ---- */
+  document.querySelectorAll('.proj-link-card').forEach(card => {
+    card.addEventListener('touchstart', () => card.classList.add('is-pressed'), { passive: true });
+    card.addEventListener('touchend',   () => card.classList.remove('is-pressed'));
+    card.addEventListener('touchcancel',() => card.classList.remove('is-pressed'));
+  });
+
+
+  /* ---- Lightbox：專案詳情頁圖片點擊放大（參考曉山波官網） ---- */
+  (function initLightbox() {
+    const pageImgs = Array.from(document.querySelectorAll('.proj-detail-page .proj-img'));
+    if (!pageImgs.length) return;
+    const total = pageImgs.length;
+    const LONG_RATIO = 1.5; // 高／寬超過這個比例就當長截圖，改成上下捲動
+
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="lightbox" role="dialog" aria-modal="true" aria-label="圖片檢視" hidden>' +
+        '<button class="lightbox-close" type="button" aria-label="關閉圖片檢視"><svg viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 21.9446L11.4446 30.5C11.176 30.7686 10.8518 30.9029 10.4721 30.9029C10.0926 30.9029 9.7686 30.7686 9.49999 30.5C9.23138 30.2314 9.09708 29.9074 9.09708 29.5279C9.09708 29.1482 9.23138 28.824 9.49999 28.5554L18.0554 20L9.49999 11.4446C9.23138 11.176 9.09708 10.8518 9.09708 10.4721C9.09708 10.0926 9.23138 9.7686 9.49999 9.49999C9.7686 9.23138 10.0926 9.09708 10.4721 9.09708C10.8518 9.09708 11.176 9.23138 11.4446 9.49999L20 18.0554L28.5554 9.49999C28.824 9.23138 29.1482 9.09708 29.5279 9.09708C29.9074 9.09708 30.2314 9.23138 30.5 9.49999C30.7686 9.7686 30.9029 10.0926 30.9029 10.4721C30.9029 10.8518 30.7686 11.176 30.5 11.4446L21.9446 20L30.5 28.5554C30.7686 28.824 30.9029 29.1482 30.9029 29.5279C30.9029 29.9074 30.7686 30.2314 30.5 30.5C30.2314 30.7686 29.9074 30.9029 29.5279 30.9029C29.1482 30.9029 28.824 30.7686 28.5554 30.5L20 21.9446Z"/></svg></button>' +
+        '<div class="lightbox-stage"><figure class="lightbox-figure">' +
+          '<img class="lightbox-img" alt="">' +
+          (total > 1 ? '<p class="lightbox-count" aria-live="polite"></p>' : '') +
+        '</figure></div>' +
+        (total > 1 ?
+          '<button class="lightbox-nav lightbox-prev" type="button" aria-label="上一張"><span class="lightbox-dot"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28.0417 21.3888H8.05541C7.65736 21.3888 7.32639 21.2568 7.0625 20.9929C6.79861 20.729 6.66666 20.3981 6.66666 20C6.66666 19.6019 6.79861 19.271 7.0625 19.0071C7.32639 18.7432 7.65736 18.6113 8.05541 18.6113H28.0417L19.0137 9.58333C18.736 9.30556 18.5994 8.98153 18.6042 8.61125C18.6089 8.2407 18.7501 7.91653 19.0279 7.63875C19.3057 7.37042 19.6297 7.23389 20 7.22917C20.3703 7.22445 20.6943 7.36097 20.9721 7.63875L32.3612 19.0279C32.5093 19.176 32.6135 19.3288 32.6737 19.4863C32.7337 19.6435 32.7637 19.8147 32.7637 20C32.7637 20.1853 32.7337 20.3565 32.6737 20.5138C32.6135 20.6713 32.5093 20.824 32.3612 20.9721L20.9721 32.3613C20.7037 32.6296 20.3821 32.7638 20.0071 32.7638C19.6321 32.7638 19.3057 32.6296 19.0279 32.3613C18.7501 32.0835 18.6112 31.7571 18.6112 31.3821C18.6112 31.0071 18.7501 30.6807 19.0279 30.4029L28.0417 21.3888Z" fill="currentColor"/></svg></span></button>' +
+          '<button class="lightbox-nav lightbox-next" type="button" aria-label="下一張"><span class="lightbox-dot"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28.0417 21.3888H8.05541C7.65736 21.3888 7.32639 21.2568 7.0625 20.9929C6.79861 20.729 6.66666 20.3981 6.66666 20C6.66666 19.6019 6.79861 19.271 7.0625 19.0071C7.32639 18.7432 7.65736 18.6113 8.05541 18.6113H28.0417L19.0137 9.58333C18.736 9.30556 18.5994 8.98153 18.6042 8.61125C18.6089 8.2407 18.7501 7.91653 19.0279 7.63875C19.3057 7.37042 19.6297 7.23389 20 7.22917C20.3703 7.22445 20.6943 7.36097 20.9721 7.63875L32.3612 19.0279C32.5093 19.176 32.6135 19.3288 32.6737 19.4863C32.7337 19.6435 32.7637 19.8147 32.7637 20C32.7637 20.1853 32.7337 20.3565 32.6737 20.5138C32.6135 20.6713 32.5093 20.824 32.3612 20.9721L20.9721 32.3613C20.7037 32.6296 20.3821 32.7638 20.0071 32.7638C19.6321 32.7638 19.3057 32.6296 19.0279 32.3613C18.7501 32.0835 18.6112 31.7571 18.6112 31.3821C18.6112 31.0071 18.7501 30.6807 19.0279 30.4029L28.0417 21.3888Z" fill="currentColor"/></svg></span></button>' : '') +
+      '</div>');
+    const lb = document.querySelector('.lightbox');
+    const fig = lb.querySelector('.lightbox-figure');
+    const img = lb.querySelector('.lightbox-img');
+    const countEl = lb.querySelector('.lightbox-count');
+    const prevBtn = lb.querySelector('.lightbox-prev');
+    const nextBtn = lb.querySelector('.lightbox-next');
+    const closeBtn = lb.querySelector('.lightbox-close');
+    let idx = -1, lastFocus = null;
+
+    const srcOf = i => pageImgs[i].currentSrc || pageImgs[i].src;
+    const preload = i => { if (i >= 0 && i < total) { const p = new Image(); p.src = srcOf(i); } };
+    function layout() {
+      const long = img.naturalWidth && img.naturalHeight / img.naturalWidth > LONG_RATIO;
+      lb.classList.toggle('is-long', !!long);
+      // 長截圖以「畫面寬、1000px、原圖寬」三者最小值顯示，不放大到糊掉
+      img.style.setProperty('--natural-w', img.naturalWidth ? img.naturalWidth + 'px' : '100%');
+    }
+    function show(i) {
+      idx = i;
+      img.onload = layout;
+      img.alt = pageImgs[i].alt;
+      img.src = srcOf(i);
+      if (img.complete) layout();
+      if (countEl) countEl.textContent = (i + 1) + ' / ' + total;
+      if (prevBtn) { prevBtn.disabled = i === 0; nextBtn.disabled = i === total - 1; }
+      lb.scrollTop = 0;
+      preload(i + 1); preload(i - 1);
+    }
+    function go(step) {
+      const n = idx + step;
+      if (n < 0 || n >= total || lb.hidden) return;
+      fig.classList.add('is-switching');
+      setTimeout(() => { show(n); fig.classList.remove('is-switching'); }, 140);
+    }
+    // 燈箱開著時鎖住背景頁面（html、body 都有 overflow-x: hidden，兩個都要鎖）；補上捲軸寬度避免畫面左右跳
+    function lockPage(on) {
+      const html = document.documentElement;
+      if (on) {
+        const sbw = window.innerWidth - html.clientWidth;
+        html.style.overflow = 'hidden'; document.body.style.overflow = 'hidden';
+        if (sbw > 0) html.style.paddingRight = sbw + 'px';
+      } else {
+        html.style.overflow = ''; html.style.paddingRight = ''; document.body.style.overflow = '';
+      }
+    }
+    function open(i, viaKey) {
+      lastFocus = document.activeElement;
+      // 頁面上還沒載入的圖一起載，關閉時版面高度才正確
+      pageImgs.forEach(im => { if (im.loading === 'lazy') im.loading = 'eager'; });
+      show(i);
+      lb.hidden = false;
+      lb.scrollTop = 0;
+      lockPage(true);
+      requestAnimationFrame(() => lb.classList.add('open'));
+      // 用滑鼠點開時不顯示焦點框，用鍵盤開啟才顯示
+      closeBtn.focus({ preventScroll: true, focusVisible: !!viaKey });
+    }
+    function close() {
+      if (lb.hidden) return;
+      lb.classList.remove('open');
+      lockPage(false);
+      // 關閉後停在「最後看的那張圖」，可以接著往下看
+      const target = pageImgs[idx];
+      if (target) {
+        const navH = window.innerWidth <= 600 ? 100 : 160;
+        const y = target.getBoundingClientRect().top + window.scrollY - navH;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+        target.focus({ preventScroll: true });
+      } else if (lastFocus) lastFocus.focus({ preventScroll: true });
+      setTimeout(() => { lb.hidden = true; img.removeAttribute('src'); }, 250);
+    }
+    window.closeLightbox = close;
+    window.isLightboxOpen = () => !lb.hidden && lb.classList.contains('open');
+
+    pageImgs.forEach((im, i) => {
+      im.setAttribute('tabindex', '0');
+      im.setAttribute('role', 'button');
+      im.setAttribute('aria-label', '放大檢視' + (im.alt ? '：' + im.alt : ''));
+      im.addEventListener('click', () => open(i));
+      im.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i, true); } });
+    });
+    closeBtn.addEventListener('click', close);
+    if (prevBtn) {
+      prevBtn.addEventListener('click', e => { e.stopPropagation(); go(-1); });
+      nextBtn.addEventListener('click', e => { e.stopPropagation(); go(1); });
+      [prevBtn, nextBtn].forEach(btn => {
+        btn.addEventListener('touchstart', () => btn.classList.add('is-pressed'), { passive: true });
+        btn.addEventListener('touchend',   () => btn.classList.remove('is-pressed'));
+        btn.addEventListener('touchcancel',() => btn.classList.remove('is-pressed'));
+      });
+    }
+    document.addEventListener('keydown', e => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      else if (e.key === 'Tab') {
+        // 焦點留在燈箱裡
+        const f = Array.from(lb.querySelectorAll('button:not(:disabled)'));
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    // 手機：點圖片以外的背景就關閉（桌機背景是左右切換區，不適用）
+    lb.addEventListener('click', e => {
+      if (!window.matchMedia('(max-width: 600px)').matches) return;
+      if (e.target.closest('.lightbox-img, .lightbox-count, button')) return;
+      close();
+    });
+    // 手機：左右滑動切換（上下滑留給長截圖捲動）
+    let tx = 0, ty = 0;
+    lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+    lb.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  })();
 
 });
